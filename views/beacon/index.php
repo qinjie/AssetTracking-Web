@@ -23,10 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'label',
             'uuid',
             'major',
             'minor',
-            'label',
 //            'equipmentId',
 //            'locationId',
             ['attribute' => 'equipment.name', 'label' => 'Equipment', 'format' => 'raw',

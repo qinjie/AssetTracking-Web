@@ -23,9 +23,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'name',
-            'address',
-            'country',
-            'postal',
+//            'address',
+//            'country',
+//            'postal',
+            ['attribute' => 'fullAddress', 'label' => 'Address'],
+//            ['attribute' => 'beaconCount', 'label' => 'Beacons',
+//                'value' => function ($data) {
+//                    if($data->beaconCount>0)
+//                        return $data->beaconCount;
+//                    return null;
+//                }],
+            ['attribute' => 'beaconNamesWithUrl', 'label' => 'Beacons', 'format' => 'raw',],
+            ['attribute' => 'equipmentNamesWithUrl', 'label' => 'Equipments', 'format' => 'raw',],
+//            ['attribute' => 'latestEquipmentsCount', 'label' => 'Equipments'],
 //            'firstBeacon.label',
             // 'latitude',
             // 'longitude',

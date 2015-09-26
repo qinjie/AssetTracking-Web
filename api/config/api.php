@@ -49,13 +49,23 @@ $config = [
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
+            'flushInterval' => YII_DEBUG ? 1 : 1000,
             'targets' => [
-                [
+
+                'file' => [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'],
                     // Create API log in the standard log dir
                     // But in file 'api.log':
                     'logFile' => '@app/runtime/logs/api.log',
+                    'exportInterval' => YII_DEBUG ? 1 : 1000,
+                    'logVars' => [],   // to remove $_COOKIES & $_SERVERS from log
+                ],
+                'email' => [
+                    'class' => 'yii\log\EmailTarget',
+                    'except' => ['yii\web\HttpException:404'],
+                    'levels' => ['error'],
+                    'message' => ['from' => 'robot@example.com', 'to' => 'admin@example.com'],
                 ],
             ],
         ],
@@ -106,11 +116,13 @@ $config = [
                     'extraPatterns' => [
                         'GET search' => 'search',
                         'PUT {id}/assign-to-location/{locationId}' => 'assign-to-location',
-                        'PUT {id}/assign-to-equipment/{equipmentId}' => 'assign-to-equipment',],
+                        'PUT {id}/assign-to-equipment/{equipmentId}' => 'assign-to-equipment',
+                        'POST check-nearby-beacons' => 'check-nearby-beacons',
+                    ],
                     'tokens' => [
                         '{id}' => '<id:\\w+>',
                         '{locationId}' => '<locationId:\\w+>',
-                        '{equipmentId}' => '<equipmentId:\\w+>', ],
+                        '{equipmentId}' => '<equipmentId:\\w+>',],
                 ],
                 ['class' => 'yii\rest\UrlRule',
                     'controller' => [
@@ -121,6 +133,7 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/country',
                     'extraPatterns' => [
                         'GET say-hello' => 'say-hello',
+                        'POST post-hello' => 'post-hello',
                         'GET search' => 'search',
                     ],
                     'except' => [],

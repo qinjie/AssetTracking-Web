@@ -10,6 +10,8 @@ use Yii;
  * @property string $id
  * @property string $equipmentId
  * @property string $locationId
+ * @property string $recordDate
+ * @property string $count
  * @property string $latitude
  * @property string $longitude
  * @property string $created
@@ -36,8 +38,8 @@ class EquipmentLocation extends \yii\db\ActiveRecord
         return [
             [['equipmentId'], 'required'],
             [['equipmentId', 'locationId'], 'integer'],
-            [['latitude', 'longitude'], 'number'],
-            [['created', 'modified'], 'safe']
+            [['count', 'recordDate', 'created', 'modified'], 'safe'],
+            [['latitude', 'longitude'], 'number']
         ];
     }
 
@@ -50,6 +52,8 @@ class EquipmentLocation extends \yii\db\ActiveRecord
             'id' => 'ID',
             'equipmentId' => 'Equipment ID',
             'locationId' => 'Location ID',
+            'recordDate' => 'Record Date',
+            'count' => 'Count',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
             'created' => 'Created',

@@ -1,5 +1,7 @@
 <?php
 
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -36,5 +38,58 @@ $this->params['breadcrumbs'][] = $this->title;
             'modified',
         ],
     ]) ?>
+    <br>
+    <h3>Current Location</h3>
+    <?= GridView::widget([
+        'dataProvider' => new ActiveDataProvider(['query' => $model->getLatestLocation()]),
+        'summary' => '',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+            'name',
+//            'address',
+//            'country',
+//            'postal',
+            ['attribute' => 'fullAddress', 'label' => 'Address'],
+//            ['attribute' => 'beaconCount', 'label' => 'Beacons'],
+//            ['attribute' => 'latestEquipmentsCount', 'label' => 'Equipments'],
+//            'firstBeacon.label',
+            // 'latitude',
+            // 'longitude',
+            // 'created',
+            // 'modified',
+//            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
+    <br>
+    <h3>Beacons</h3>
+    <?= GridView::widget([
+        'dataProvider' => new yii\data\ActiveDataProvider(['query' => $model->getBeacons()]),
+        'summary' => "",
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+            'label',
+            'uuid',
+            'major',
+            'minor',
+//             'created',
+//             'modified',
+//            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+    <br>
+    <h3>Past Locations</h3>
+    <?= GridView::widget([
+        'dataProvider' => new ActiveDataProvider(['query' => $model->getEquipmentLocations()]),
+        'summary' => '',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'recordDate',
+            'location.name',
+            ['attribute' => 'location.fullAddress', 'label' => 'Address'],
+        ],
+    ]); ?>
 </div>

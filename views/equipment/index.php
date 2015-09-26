@@ -25,8 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'department',
-            'remark',
-            'created',
+//            'remark',
+            ['attribute' => 'beaconNamesWithUrl', 'label' => 'Beacons', 'format' => 'raw',],
+            ['attribute' => 'latestLocation.name', 'label' => 'Last Location',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->latestLocation)
+                        return Html::a($data->latestLocation->name, ['/location/view', 'id' => $data->latestLocation->id]);
+                    return null;
+                }],
+            ['attribute' => 'lastSeen', 'label' => 'Last Seen'],
+//            'created',
             // 'modified',
 
             ['class' => 'yii\grid\ActionColumn'],

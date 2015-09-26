@@ -1,5 +1,6 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -39,5 +40,49 @@ $this->params['breadcrumbs'][] = $this->title;
             'modified',
         ],
     ]) ?>
+
+    <br>
+    <h3>Beacons</h3>
+    <?= GridView::widget([
+        'dataProvider' => new yii\data\ActiveDataProvider(['query' => $model->getBeacons()]),
+        'summary' => "",
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+            'label',
+            'uuid',
+            'major',
+            'minor',
+//             'created',
+//             'modified',
+//            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+    <br>
+    <h3>Current Equipments</h3>
+    <?= GridView::widget([
+        'dataProvider' => new yii\data\ActiveDataProvider(['query' => $model->getLatestEquipments()]),
+        'summary' => '',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+            'name',
+            'department',
+            'remark',
+//            ['attribute' => 'latestLocation.name', 'label' => 'Last Location',
+//                'format' => 'raw',
+//                'value' => function ($data) {
+//                    if($data->latestLocation)
+//                        return Html::a($data->latestLocation->name, ['/location/view', 'id' => $data->latestLocation->id]);
+//                    return null;
+//                }],
+//            ['attribute' => 'lastSeen', 'label' => 'Last Seen'],
+////            'created',
+//            // 'modified',
+//
+//            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

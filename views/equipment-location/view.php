@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'equipmentId',
             'locationId',
+            'recordDate',
             'latitude',
             'longitude',
             'created',

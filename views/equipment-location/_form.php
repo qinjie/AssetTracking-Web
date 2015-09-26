@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'locationId')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'recordDate')->textInput() ?>
+
     <?= $form->field($model, 'latitude')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'longitude')->textInput(['maxlength' => true]) ?>

@@ -10,6 +10,7 @@
 namespace app\api\modules\v1\controllers;
 
 use app\api\models\User;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\auth\CompositeAuth;
@@ -59,7 +60,7 @@ class CountryController extends ActiveController
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::className(),
             # exclude actions from authentication
-            'except' => ['view', 'say-hello'],
+            'except' => ['view', 'say-hello', 'post-hello'],
             'authMethods' => [
                 # Add following key-value pair in HTTP header where username:password is 64bit-encoded
                 # Authorization     Basic <username:password>
@@ -82,7 +83,7 @@ class CountryController extends ActiveController
             'rules' => [
                 [
                     // No authentication required
-                    'actions' => ['view', 'say-hello'],
+                    'actions' => ['view', 'say-hello', 'post-hello'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
@@ -181,8 +182,24 @@ class CountryController extends ActiveController
     //-- Custom action, routing is defined in web.php
     public function actionSayHello()
     {
+        Yii::info("say-hello (" . date("Y-m-d H:i:s") . ")", "Test");
         return [
+            'action' => 'say-hello',
             'message' => 'Hello World',
+            'siteroot' => \Yii::getAlias('@siteroot'),
+            'baseurl' => Url::base(),
+            'baseurl_true' => Url::base(true),
+            'module' => \Yii::$app->controller->module->id,
+        ];
+    }
+
+    public function actionPostHello()
+    {
+        $post = \yii::$app->request->post();
+        Yii::info("post-hello (" . date("Y-m-d H:i:s") . "): " . print_r($post, true), "Test");
+        return [
+            'action' => 'post-hello',
+            'body' => $post,
             'siteroot' => \Yii::getAlias('@siteroot'),
             'baseurl' => Url::base(),
             'baseurl_true' => Url::base(true),

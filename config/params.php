@@ -7,7 +7,6 @@ return [
     'supportEmail' => 'zqi2@np.edu.sg',
     'user.passwordResetTokenExpire' => 3600,
     'project.id.canteen' => 1,
-    'upload.nodefile' => '/upload/nodefile/',
     'folder.upload' => '/upload/',
     'floor.crowdindex' => 'crowdindex',
     'application' => '/web'

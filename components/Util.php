@@ -1,6 +1,8 @@
 <?php
 
 namespace app\components;
+use Yii;
+use yii\helpers\Url;
 
 /**
  * Created by PhpStorm.
@@ -51,19 +53,29 @@ class Util
     public static function checkRemoteFile($url)
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_URL, $url);
         // don't download content
         curl_setopt($ch, CURLOPT_NOBODY, 1);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if(curl_exec($ch)!==FALSE)
-        {
+        if (curl_exec($ch) !== FALSE) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
+    }
+
+    public static function getFileUrl($fileName)
+    {
+        if (!is_null($fileName)) {
+            $app = Yii::$app->params['application'];
+            $base = str_replace($app, '', Url::base(true));
+            $base = $base . Yii::$app->params['folder.upload'];
+            $url = $base . $fileName;
+
+            return $url;
+        }
+        return null;
     }
 
 }
