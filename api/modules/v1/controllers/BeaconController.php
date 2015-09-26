@@ -16,6 +16,7 @@ use app\api\models\Location;
 use app\api\models\EquipmentLocation;
 use Yii;
 use yii\base\InvalidCallException;
+use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBasicAuth;
@@ -105,17 +106,22 @@ class BeaconController extends MyActiveController
         if (!\Yii::$app->request->isPost) {
             throw new InvalidCallException("Only POST action is allowed", 400);
         }
+        \Yii::info(\Yii::$app->request->post(), __METHOD__);
 
         $POST_KEY_BEACONS = 'beacons';
         $beacons = \yii::$app->request->post($POST_KEY_BEACONS);
+        \Yii::info(print_r(\Yii::$app->request->post($POST_KEY_BEACONS)), __METHOD__);
 
+        if(!$beacons){
+            throw new InvalidParamException();
+        }
         $locations = [];
         $equipments = [];
         $unassigns = [];
         $unknowns = [];
         // Identify
         foreach ($beacons as $bs) {
-            $beacon = Beacon::findOne(['uuid' => $bs['uuid'], 'major' => $bs['major'], 'minor' => $bs['minor']]);
+            $beacon = Beacon::findOne(['uuid' => $bs['proximityUUID'], 'major' => $bs['major'], 'minor' => $bs['minor']]);
             if ($beacon) {
                 \Yii::info($beacon, __METHOD__);
                 if ($beacon->location) {
