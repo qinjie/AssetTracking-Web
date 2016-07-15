@@ -2,9 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\EquipmentSearch;
+use app\models\ProjectUser;
 use Yii;
 use app\models\Equipment;
+use yii\behaviors\TimestampBehavior;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,12 +37,12 @@ class EquipmentController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Equipment::find(),
-        ]);
+        $searchModel = new EquipmentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -62,8 +67,11 @@ class EquipmentController extends Controller
     {
         $model = new Equipment();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $query = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one();
+            $model->projectId = $query['projectId'];
+            if ($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

@@ -17,6 +17,6 @@ Hi, <?= Html::encode($user->username) ?>!
 
 To confirm your email address, please click here:
 
-<?= Html::a(Html::encode($confirmLink), $confirmLink) ?>
+<?= $confirmLink ?>
 
 If you have not registered on our website, then simply delete this email.

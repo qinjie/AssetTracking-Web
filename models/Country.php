@@ -2,8 +2,10 @@
 
 namespace app\models;
 
-use app\components\MyActiveRecord;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "country".
@@ -11,16 +13,30 @@ use Yii;
  * @property integer $id
  * @property string $code
  * @property string $name
- * @property integer $population
- * @property integer $userId
  * @property string $created
  * @property string $modified
  */
-class Country extends MyActiveRecord
+class Country extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                // Modify only created not updated attribute
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'modified'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['modified'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return 'country';
@@ -33,9 +49,9 @@ class Country extends MyActiveRecord
     {
         return [
             [['code', 'name'], 'required'],
-            [['population', 'userId'], 'integer'],
+            [['created', 'modified'], 'safe'],
             [['code'], 'string', 'max' => 2],
-            [['name'], 'string', 'max' => 52]
+            [['name'], 'string', 'max' => 52],
         ];
     }
 
@@ -48,20 +64,8 @@ class Country extends MyActiveRecord
             'id' => 'ID',
             'code' => 'Code',
             'name' => 'Name',
-            'population' => 'Population',
-            'userId' => 'Owner',
             'created' => 'Created',
             'modified' => 'Modified',
         ];
-    }
-
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'userId']);
-    }
-
-    public function getPersons()
-    {
-        return $this->hasMany(Person::className(), ['countryId' => 'id']);
     }
 }

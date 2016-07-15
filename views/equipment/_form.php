@@ -18,9 +18,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'remark')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'created')->textInput() ?>
+    <?= $form->field($model, 'created')->textInput()->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'modified')->textInput() ?>
+    <?= $form->field($model, 'modified')->textInput()->hiddenInput()->label(false) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

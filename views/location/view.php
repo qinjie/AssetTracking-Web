@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'address',
-            'country',
+            'countryName',
             'postal',
             'latitude',
             'longitude',

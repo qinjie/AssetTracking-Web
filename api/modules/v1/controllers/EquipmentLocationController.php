@@ -43,4 +43,5 @@ class EquipmentLocationController extends MyActiveController
 
         return $behaviors;
     }
+
 }

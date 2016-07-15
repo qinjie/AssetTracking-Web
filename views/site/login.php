@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
     ])->checkbox() ?>
     <div style="color:#999;margin:1em 0">
-        If you forgot your password you can <?= Html::a('reset it', ['requestPasswordResetToken']) ?>.
+        If you forgot your password you can <?= Html::a('reset it', ['request-password-reset']) ?>.
     </div>
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">

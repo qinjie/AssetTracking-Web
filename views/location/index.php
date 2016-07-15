@@ -12,13 +12,22 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="location-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Location', ['create'], ['class' => 'btn btn-success']) ?>
+        <table width="100%">
+            <tr>
+                <td align="left">
+                    <?= Html::a('Create Location', ['create'], ['class' => 'btn btn-success']) ?>
+                </td>
+                <td align="right">
+                    <?= Html::a('Go to Country', ['country/'], ['class' => 'btn btn-primary']) ?>
+                </td>
+            </tr>
+        </table>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'id',

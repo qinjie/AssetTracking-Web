@@ -87,7 +87,7 @@ class User extends MyActiveRecord implements IdentityInterface, Linkable, RateLi
             ['email', 'filter', 'filter' => 'trim'],
             ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_WAIT, self::STATUS_DELETED]],
         ];
     }
 

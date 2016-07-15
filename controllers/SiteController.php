@@ -2,7 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\ChangeEmailForm;
+use app\models\ChangePasswordForm;
+use app\models\CommonFunction;
+use app\models\User;
 use Yii;
+use yii\base\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -25,7 +30,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -33,7 +38,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -63,7 +68,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $beaconNumber = (new CommonFunction())->getBeaconNumber();
+        $equipmentNumber = (new CommonFunction())->getEquipmentNumber();
+        $locationNumber = (new CommonFunction())->getLocationNumber();
+        return $this->render('index', [
+            'beaconNumber' => $beaconNumber,
+            'equipmentNumber' => $equipmentNumber,
+            'locationNumber' => $locationNumber,
+        ]);
     }
 
     public function actionLogin()
@@ -179,6 +191,33 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+
+    public function actionAccount()
+    {
+        try {
+            return $this->render('account', [
+                'model' => User::findOne(Yii::$app->user->identity->getId()),
+            ]);
+        } catch (Exception $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+    }
+
+    public function actionChangePassword()
+    {
+        $user = User::findOne(Yii::$app->user->identity->getId());
+        $model = new ChangePasswordForm($user);
+
+        if ($model->load(Yii::$app->request->post()) && $model->changePassword()) {
+            Yii::$app->getSession()->setFlash('success', 'You have changed your password.');
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('changePassword', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionImagine()

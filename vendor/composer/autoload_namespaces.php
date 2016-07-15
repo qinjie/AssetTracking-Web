@@ -11,8 +11,7 @@ return array(
     'PHPParser' => array($vendorDir . '/nikic/php-parser/lib'),
     'MikeVanRiel' => array($vendorDir . '/mikevanriel/text-to-latex/src', $vendorDir . '/mikevanriel/text-to-latex/tests/unit'),
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
+    'Highlight\\' => array($vendorDir . '/scrivo/highlight.php'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
-    'Faker\\PHPUnit' => array($vendorDir . '/fzaninotto/faker/test'),
-    'Faker' => array($vendorDir . '/fzaninotto/faker/src'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
 );

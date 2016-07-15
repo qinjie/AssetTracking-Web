@@ -4,6 +4,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\widgets\Alert;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -25,6 +26,35 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 <div class="wrap">
     <?php
+    if (Yii::$app->user->isGuest) {
+        $items = [
+//            ['label' => 'Beacons', 'url' => ['/beacon/']],
+//            ['label' => 'Equipments', 'url' => ['/equipment/']],
+//            ['label' => 'Locations', 'url' => ['/location/']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Sign Up', 'url' => ['/site/signup']],
+            ['label' => 'Login', 'url' => ['/site/login']],
+        ];
+    } else {
+        $items = [
+            ['label' => 'Beacons', 'url' => ['/beacon/']],
+            ['label' => 'Equipments', 'url' => ['/equipment/']],
+            ['label' => 'Locations', 'url' => ['/location/']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            [
+                'label' => 'Account (' . Yii::$app->user->identity->username . ')',
+                'items' => [
+                    ['label' => 'Account',
+                        'url' => ['site/account'],
+                    ],
+                    ['label' => 'Logout',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ],
+                ],
+            ]
+        ];
+    }
     NavBar::begin([
         'brandLabel' => 'Asset Tracking',
         'brandUrl' => Yii::$app->homeUrl,
@@ -34,22 +64,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-//            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Beacons', 'url' => ['/beacon/']],
-            ['label' => 'Equipments', 'url' => ['/equipment/']],
-            ['label' => 'Locations', 'url' => ['/location/']],
-//            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-//            Yii::$app->user->isGuest ?
-//                ['label' => 'Sign Up', 'url' => ['/site/signup']] :
-//                false,
-//            Yii::$app->user->isGuest ?
-//                ['label' => 'Login', 'url' => ['/site/login']] :
-//                ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-//                    'url' => ['/site/logout'],
-//                    'linkOptions' => ['data-method' => 'post']],
-        ],
+        'items' => $items,
     ]);
     NavBar::end();
     ?>
@@ -58,6 +73,7 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+        <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 </div>

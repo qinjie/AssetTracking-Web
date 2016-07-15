@@ -3,20 +3,25 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\helpers\Html;
 
 /**
  * This is the model class for table "location".
  *
  * @property string $id
+ * @property string $projectId
  * @property string $name
  * @property string $address
- * @property string $country
+ * @property string $countryId
  * @property string $postal
  * @property string $latitude
  * @property string $longitude
  * @property string $created
  * @property string $modified
+ * @property int $rssi
  *
  * @property Beacon[] $beacons
  * @property EquipmentLocation[] $equipmentLocations
@@ -26,6 +31,24 @@ class Location extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $rssi;
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                // Modify only created not updated attribute
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'modified'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['modified'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return 'location';
@@ -37,12 +60,13 @@ class Location extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'projectId'], 'required'],
+            [['projectId'], 'integer'],
             [['latitude', 'longitude'], 'number'],
             [['created', 'modified'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['address'], 'string', 'max' => 200],
-            [['country'], 'string', 'max' => 50],
+            [['countryId'], 'string', 'max' => 50],
             [['postal'], 'string', 'max' => 10]
         ];
     }
@@ -56,7 +80,7 @@ class Location extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'address' => 'Address',
-            'country' => 'Country',
+            'countryId' => 'Country',
             'postal' => 'Postal',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
@@ -122,9 +146,14 @@ class Location extends \yii\db\ActiveRecord
         return $this->getLatestEquipments()->count();
     }
 
+    public function getCountryName(){
+        $query = Country::find()->where(['id' => $this->countryId])->one();
+        return $query['name'];
+    }
+
     public function getFullAddress()
     {
-        return $this->address . " " . $this->country . " " . $this->postal;
+        return $this->address . " " . $this->getCountryName() . " " . $this->postal;
     }
 
 

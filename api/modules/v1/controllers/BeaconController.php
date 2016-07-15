@@ -110,7 +110,7 @@ class BeaconController extends MyActiveController
 
         $POST_KEY_BEACONS = 'beacons';
         $beacons = \yii::$app->request->post($POST_KEY_BEACONS);
-        \Yii::info(print_r(\Yii::$app->request->post($POST_KEY_BEACONS)), __METHOD__);
+//        \Yii::info(print_r(\Yii::$app->request->post($POST_KEY_BEACONS)), __METHOD__);
 
         if(!$beacons){
             throw new InvalidParamException();
@@ -125,8 +125,10 @@ class BeaconController extends MyActiveController
             if ($beacon) {
                 \Yii::info($beacon, __METHOD__);
                 if ($beacon->location) {
+                    $beacon->location->rssi = $bs['rssi'];
                     $locations[] = $beacon->location;
                 } elseif ($beacon->equipment) {
+                    $beacon->equipment->rssi = $bs['rssi'];
                     $equipments[] = $beacon->equipment;
                 } else {
                     $unassigns[] = $beacon;
@@ -140,19 +142,46 @@ class BeaconController extends MyActiveController
         if (!empty($locations)) {
             $loc = $locations[0];
             foreach ($equipments as $eq) {
-                $el = EquipmentLocation::findOne(['locationId' => $loc->id, 'equipmentId' => $eq->id, 'recordDate' => date('Y-m-d')]);
-                if (!$el) {
-                    $el = new EquipmentLocation();
-                    $el->equipmentId = $eq->id;
-                    $el->locationId = $loc->id;
-                    $el->recordDate = date('Y-m-d');
-                    $el->count = 0;
+                $sub = null;
+                $location = null;
+                // get nearest location of equipment by RSSI
+                foreach ($locations as $loc){
+                    if ($sub == null){
+                        $sub = abs($eq->rssi - $loc->rssi);
+                        $location = $loc;
+                    }
+                    elseif ($sub > abs($eq->rssi - $loc->rssi)){
+                        $sub = abs($eq->rssi - $loc->rssi);
+                        $location = $loc;
+                    }
                 }
-                $el->count = $el->count + 1;
-                $el->save();
+                if ($location != null){
+                    $el = EquipmentLocation::findOne(['locationId' => $location->id, 'equipmentId' => $eq->id, 'recordDate' => date('Y-m-d')]);
+                    if (!$el) {
+                        $el = new EquipmentLocation();
+                        $el->equipmentId = $eq->id;
+                        $el->locationId = $location->id;
+                        $el->recordDate = date('Y-m-d');
+                        $el->count = 0;
+                    }
+                    $el->count = $el->count + 1;
+                    $el->save();
+                }
             }
         }
 
         return ['locations' => $locations, 'equipments' => $equipments, 'unassigned' => $unassigns, 'unknowns' => $unknowns];
+    }
+
+    // appx calculate distance by RSSI
+    private function cal($rs){
+        $tx = 74; //TXpower
+        if ($rs == 0)
+            return 1000.0; // assume range = 1000 (m) when RSSI = 0
+        $ratio = $rs*1.0/$tx;
+        if ($ratio < 1.0)
+            return pow($ratio, 10);
+        else
+            return (0.89976) * pow($ratio, 7.7095) + 0.111;
     }
 }

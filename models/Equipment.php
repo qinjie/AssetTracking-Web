@@ -4,6 +4,9 @@ namespace app\models;
 
 use app\components\MyActiveRecord;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -11,11 +14,13 @@ use yii\helpers\Url;
  * This is the model class for table "equipment".
  *
  * @property string $id
+ * @property string $projectId
  * @property string $name
  * @property string $department
  * @property string $remark
  * @property string $created
  * @property string $modified
+ * @property int rssi
  *
  * @property Beacon[] $beacons
  */
@@ -24,6 +29,24 @@ class Equipment extends MyActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $rssi;
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                // Modify only created not updated attribute
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'modified'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['modified'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return 'equipment';
@@ -35,9 +58,10 @@ class Equipment extends MyActiveRecord
     public function rules()
     {
         return [
-            [['created', 'modified'], 'safe'],
+            [['created', 'modified', 'projectId'], 'safe'],
+            [['projectId'], 'integer'],
             [['name', 'department'], 'string', 'max' => 100],
-            [['remark'], 'string', 'max' => 200]
+            [['remark'], 'string', 'max' => 200],
         ];
     }
 
@@ -53,6 +77,7 @@ class Equipment extends MyActiveRecord
             'remark' => 'Remark',
             'created' => 'Created',
             'modified' => 'Modified',
+            'rssi' => 'RSSI',
         ];
     }
 

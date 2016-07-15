@@ -17,14 +17,13 @@ use yii\db\Expression;
  * @property string $remark
  * @property string $serial
  * @property integer $status
- * @property integer $userId
  * @property string $created
  * @property string $modified
  *
- * @property Floor[] $floors
- * @property Node[] $nodes
+ * @property Beacon[] $beacns
+ * @property Equipment[] $equipments
+ * @property Location[] $locations
  * @property User $owner
- * @property ProjectSettings[] $projectsettings
  * @property ProjectUser[] $projectusers
  */
 class Project extends MyActiveRecord
@@ -50,11 +49,6 @@ class Project extends MyActiveRecord
                 ],
                 'value' => new Expression('NOW()'),
             ],
-            'blameable' => [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'userId',
-                'updatedByAttribute' => null,
-            ],
         ];
     }
 
@@ -64,7 +58,7 @@ class Project extends MyActiveRecord
     public function rules()
     {
         return [
-            [['status', 'userId'], 'integer'],
+            [['status'], 'integer'],
             [['created', 'modified'], 'safe'],
             [['label'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 200],
@@ -83,7 +77,6 @@ class Project extends MyActiveRecord
             'remark' => 'Remark',
             'serial' => 'Serial',
             'status' => 'Status',
-            'userId' => 'Creator ID',
             'created' => 'Created',
             'modified' => 'Modified',
         ];
@@ -92,31 +85,15 @@ class Project extends MyActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFloors()
+    public function getBeacons()
     {
-        return $this->hasMany(Floor::className(), ['projectId' => 'id']);
+        return $this->hasMany(Beacon::className(), ['projectId' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActiveFloors()
-    {
-        return $this->hasMany(Floor::className(), ['projectId' => 'id', 'status' => 1]);
-    }
 
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNodes()
-    {
-        return $this->hasMany(Node::className(), ['projectId' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getOwner()
     {
         return $this->hasOne(User::className(), ['id' => 'userId']);
@@ -138,19 +115,5 @@ class Project extends MyActiveRecord
         return $this->hasMany(User::className(), ['id' => 'userId'])->via('projectUsers');
     }
 
-    public function getLatestNodeFiles()
-    {
-        $sql = "SELECT n1.*
-            FROM nodefile AS n1
-            LEFT JOIN nodefile AS n2
-              ON (n1.nodeId = n2.nodeId AND n1.id < n2.id)
-            LEFT JOIN node AS n
-              ON (n1.nodeId = n.id)
-            WHERE n2.nodeId IS NULL AND n.projectId = :projectId";
-
-        $nodeFiles = NodeFile::findBySql($sql, ['projectId' => $this->id])->all();
-
-        return $nodeFiles;
-    }
 
 }

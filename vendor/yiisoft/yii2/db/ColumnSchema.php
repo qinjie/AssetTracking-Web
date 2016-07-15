@@ -27,7 +27,7 @@ class ColumnSchema extends Object
     public $allowNull;
     /**
      * @var string abstract type of this column. Possible abstract types include:
-     * string, text, boolean, smallint, integer, bigint, float, decimal, datetime,
+     * char, string, text, boolean, smallint, integer, bigint, float, decimal, datetime,
      * timestamp, time, date, binary, and money.
      */
     public $type;
@@ -127,13 +127,15 @@ class ColumnSchema extends Object
                 }
                 if (is_float($value)) {
                     // ensure type cast always has . as decimal separator in all locales
-                    return str_replace(',', '.', (string)$value);
+                    return str_replace(',', '.', (string) $value);
                 }
-                return (string)$value;
+                return (string) $value;
             case 'integer':
                 return (int) $value;
             case 'boolean':
-                return (bool) $value;
+                // treating a 0 bit value as false too
+                // https://github.com/yiisoft/yii2/issues/9006
+                return (bool) $value && $value !== "\0";
             case 'double':
                 return (double) $value;
         }

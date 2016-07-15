@@ -50,13 +50,13 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             //set this property to false to send mails to real email addresses
             //comment the following array to send mail using php's mail function
-            'useFileTransport' => true,
+            'useFileTransport' => false,
             'viewPath' => '@app/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
-                'username' => 'qinjie.np@gmail.com',
-                'password' => 'Soe7014Ece',
+                'username' => 'eceiot.test@gmail.com',
+                'password' => 'qw1234er',
                 'port' => '587',
                 'encryption' => 'tls',
             ],

@@ -16,8 +16,11 @@ return array(
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\apidoc\\' => array($vendorDir . '/yiisoft/yii2-apidoc'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2'),
+    'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'dosamigos\\highcharts\\' => array($vendorDir . '/2amigos/yii2-highcharts-widget/src'),
     'cebe\\markdown\\latex\\' => array($vendorDir . '/cebe/markdown-latex'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'cebe\\jssearch\\' => array($vendorDir . '/cebe/js-search/lib'),
+    'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );
