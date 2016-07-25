@@ -35,7 +35,7 @@ use kartik\select2\Select2;
         'pluginOptions' => [
             'allowClear' => true
         ],
-    ]); ?>
+    ])->hint("You should choose either a Location or a Equipment only"); ?>
 
     <?= $form->field($model, 'created')->textInput()->hiddenInput()->label(false) ?>
 

@@ -76,8 +76,10 @@ class Beacon extends MyActiveRecord
             'major' => 'Major',
             'minor' => 'Minor',
             'label' => 'Label',
-            'equipmentId' => 'Equipment ID',
-            'locationId' => 'Location ID',
+            'equipmentId' => 'Equipment',
+            'locationId' => 'Location',
+            'equipmentName' => 'Equipment',
+            'locationName' => 'Location',
             'created' => 'Created',
             'modified' => 'Modified',
         ];
