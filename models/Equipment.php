@@ -14,7 +14,6 @@ use yii\helpers\Url;
  * This is the model class for table "equipment".
  *
  * @property string $id
- * @property string $projectId
  * @property string $name
  * @property string $department
  * @property string $remark
@@ -58,8 +57,7 @@ class Equipment extends MyActiveRecord
     public function rules()
     {
         return [
-            [['created', 'modified', 'projectId'], 'safe'],
-            [['projectId'], 'integer'],
+            [['created', 'modified'], 'safe'],
             [['name', 'department'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 200],
         ];

@@ -42,12 +42,7 @@ class LocationSearch extends Location
      */
     public function search($params)
     {
-        if ($proj = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one()){
-            $query = Location::find()->where(['projectId' => $proj['projectId']]);
-        }
-        else{
-            $query = Location::find();
-        }
+        $query = Location::find();
 
         // add conditions that should always apply here
 

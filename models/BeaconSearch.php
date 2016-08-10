@@ -41,12 +41,7 @@ class BeaconSearch extends Beacon
      */
     public function search($params)
     {
-        if ($proj = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one()){
-            $query = Beacon::find()->where(['projectId' => $proj['projectId']]);
-        }
-        else{
-            $query = Beacon::find();
-        }
+        $query = Beacon::find();
 
         // add conditions that should always apply here
 

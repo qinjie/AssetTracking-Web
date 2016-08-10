@@ -69,11 +69,8 @@ class BeaconController extends Controller
         $items1 = ArrayHelper::map(Location::find()->orderBy('name')->all(), 'id', 'name');
         $items2 = ArrayHelper::map(Equipment::find()->orderBy('name')->all(), 'id', 'name');
 
-        if ($model->load(Yii::$app->request->post())) {
-            $query = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one();
-            $model->projectId = $query['projectId'];
-            if ($model->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

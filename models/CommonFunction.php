@@ -15,23 +15,14 @@ use Yii;
 class CommonFunction extends Model
 {
     public function getBeaconNumber(){
-        if ($proj = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one()){
-            return Beacon::find()->where(['projectId' => $proj['projectId']])->count();
-        }
         return Beacon::find()->count();
     }
 
     public function getEquipmentNumber(){
-        if ($proj = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one()){
-            return Equipment::find()->where(['projectId' => $proj['projectId']])->count();
-        }
         return Equipment::find()->count();
     }
 
     public function getLocationNumber(){
-        if ($proj = ProjectUser::find()->where(['userId' => Yii::$app->user->id])->one()){
-            return Location::find()->where(['projectId' => $proj['projectId']])->count();
-        }
         return Location::find()->count();
     }
 }

@@ -12,7 +12,6 @@ use yii\db\Expression;
  * This is the model class for table "beacon".
  *
  * @property string $id
- * @property string $projectId
  * @property string $uuid
  * @property integer $major
  * @property integer $minor
@@ -56,8 +55,8 @@ class Beacon extends MyActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'major', 'minor', 'projectId'], 'required'],
-            [['major', 'minor', 'equipmentId', 'locationId', 'projectId'], 'integer'],
+            [['uuid', 'major', 'minor'], 'required'],
+            [['major', 'minor', 'equipmentId', 'locationId'], 'integer'],
             [['created', 'modified'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
             [['label'], 'string', 'max' => 100]
@@ -71,7 +70,6 @@ class Beacon extends MyActiveRecord
     {
         return [
             'id' => 'ID',
-            'projectId' => 'Project ID',
             'uuid' => 'UUID',
             'major' => 'Major',
             'minor' => 'Minor',

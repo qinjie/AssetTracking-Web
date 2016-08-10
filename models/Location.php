@@ -60,8 +60,7 @@ class Location extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'projectId'], 'required'],
-            [['projectId'], 'integer'],
+            [['name'], 'required'],
             [['latitude', 'longitude'], 'number'],
             [['created', 'modified'], 'safe'],
             [['name'], 'string', 'max' => 100],
